@@ -50,11 +50,13 @@ workflow_status:
 
       - id: "product-brief"
         name: "Product Brief"
-        status: "recommended"
+        status: "docs/bmm-product-brief-2025-11-17.md"
         agent: "analyst"
         command: "product-brief"
         included: true
-        note: "Strategic product planning - SELECTED BY USER"
+        note: "COMPLETED - Comprehensive product strategy (1,735 lines): 6 detailed personas (Anna, Karolina, Dr. Nowak, Piotr, Janina, Dr. Lewandowski), product vision & strategic pillars, roadmap MVP→V4, technical architecture (NestJS+Flutter), GTM strategy (B2B-first), competitive analysis, business model (3 revenue streams), risk mitigation, KPIs. Synthesizes brainstorming + research + financial model. Ready for PRD phase."
+        completed_date: "2025-11-17"
+        output_file: "docs/bmm-product-brief-2025-11-17.md"
 
   # Phase 1: Planning
   - phase: 1
