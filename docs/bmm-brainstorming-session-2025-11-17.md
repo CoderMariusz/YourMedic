@@ -5167,6 +5167,739 @@ Monthly Active Appointments Completed (MAAC)
 
 ---
 
+## 🔄 Technique 4: Assumption Reversal
+
+**Duration:** 15 minutes
+**Goal:** Challenge fundamental assumptions by reversing them - discover breakthrough insights
+
+**Method:** Take core beliefs → Flip them 180° → Explore what this reveals
+
+---
+
+### **ASSUMPTION #1: "Patients want MORE choice"**
+
+**Standard belief:**
+- More doctors = better marketplace
+- Wide selection = competitive advantage
+- Abundance = patient satisfaction
+
+**REVERSED: "What if patients want LESS choice?"**
+
+**Exploration:**
+```
+The Paradox of Choice (Barry Schwartz):
+- Too many options = decision paralysis
+- 7 choices optimal, 20+ choices overwhelming
+- Curation > Selection
+
+Applied to YourMedic:
+❌ Don't show all 500 dermatologists in Warsaw
+✅ Show TOP 3 perfectly matched to patient
+
+How:
+- AI pre-filters based on:
+  - Symptoms (AI knows you need dermoscopy specialist)
+  - Location (15-min commute max)
+  - Availability (appointments within 48h)
+  - Reviews (4.8+ stars only)
+  - Insurance compatibility
+
+Result: "We found THE perfect doctor for you"
+(not "Here are 500 doctors, good luck choosing")
+```
+
+**Breakthrough Insight:**
+> **"Concierge Algorithm" beats "Marketplace Algorithm"**
+> Don't compete with Docplanner on selection size. Compete on CURATION quality.
+> Patient doesn't want 500 options. They want THE ONE right option.
+
+**Implementation:**
+```typescript
+// Instead of this (Docplanner approach):
+const doctors = await findAllDermatologists({ city: 'Warsaw' });
+return doctors; // 500 results
+
+// Do this (YourMedic approach):
+const perfectMatch = await curateTopMatches({
+  symptoms: ['acne', 'scarring'],
+  patientLocation: [52.2297, 21.0122],
+  maxDistance: 5000, // 5km
+  maxWaitTime: 48, // hours
+  minRating: 4.8,
+  insuranceAccepted: 'PZU',
+  specializations: ['acne treatment', 'laser therapy'],
+});
+
+return perfectMatch.slice(0, 3); // TOP 3 only
+```
+
+---
+
+### **ASSUMPTION #2: "Scale fast to win"**
+
+**Standard belief:**
+- Growth = success
+- First to 1M users wins
+- Blitz-scaling beats slow-and-steady
+
+**REVERSED: "What if SMALL is better?"**
+
+**Exploration:**
+```
+The Boutique Advantage:
+- Niche > Mass market
+- Deep relationships > Wide reach
+- Premium pricing > Volume pricing
+
+Applied to YourMedic:
+❌ Don't chase 1M patients in Year 1
+✅ Serve 10,000 patients EXCEPTIONALLY well
+
+Strategy: "Luxury Healthcare Marketplace"
+- Target: Top 10% income (€3k+/month)
+- Clinics: Premium only (LuxMed tier)
+- Doctors: Handpicked, verified, trained
+- Price: €20 booking fee (vs €0 Docplanner)
+- Value: White-glove service, personal health manager
+
+Why this works:
+- High LTV: €500/year (vs €45 mass market)
+- Low CAC: Word of mouth (rich tell rich friends)
+- Profitability: Year 1 (not Year 3)
+- Defensibility: Luxury brand = moat
+```
+
+**Breakthrough Insight:**
+> **"Premium positioning" beats "mass market race"**
+> Don't compete with Docplanner on user count. Compete on SERVICE QUALITY.
+> 10,000 premium users (€5M ARR) > 1M freemium users (€1M ARR).
+
+**Business Model Shift:**
+```
+Mass Market Model (original plan):
+- Users: 1M
+- ARPU: €5/year (commission)
+- Revenue: €5M
+- CAC: €20 (high churn, constant acquisition)
+
+Premium Model (reversed assumption):
+- Users: 10k
+- ARPU: €500/year (subscription + concierge)
+- Revenue: €5M (same!)
+- CAC: €50 (but LTV = €2,000, so 40:1 ratio!)
+
+Result: Same revenue, 10x better unit economics
+```
+
+---
+
+### **ASSUMPTION #3: "AI makes healthcare cheaper"**
+
+**Standard belief:**
+- Automation reduces costs
+- AI replaces expensive humans
+- Efficiency = profitability
+
+**REVERSED: "What if AI makes healthcare MORE EXPENSIVE?"**
+
+**Exploration:**
+```
+The AI Cost Paradox:
+- AI development: €200k (ML engineers, training)
+- AI certification: €55k (medical device approval)
+- AI infrastructure: €5k/month (GPU, hosting)
+- AI maintenance: €100k/year (model updates, retraining)
+TOTAL Year 1: €415k
+
+Human alternative:
+- 5 human triagers: €40k/year each = €200k/year
+- No certification needed
+- No infrastructure costs
+- Immediate start (no 12-month build)
+
+Wait... humans are CHEAPER than AI (Year 1-2)!
+
+But AI scales better:
+- 10k users: AI = €415k, Humans = €200k (humans win)
+- 100k users: AI = €415k, Humans = €2M (AI wins)
+- 1M users: AI = €415k, Humans = €20M (AI dominates)
+
+Insight: AI is expensive until you scale
+```
+
+**Breakthrough Insight:**
+> **"Start with humans, scale with AI"**
+> Don't build AI in MVP. Hire human symptom checkers (nurses, medical students).
+> Test product-market fit with humans. THEN automate with AI once you have:
+> - 50k+ training data points (from human conversations)
+> - €500k revenue (can afford €415k AI investment)
+> - Proven demand (worth the certification effort)
+
+**Implementation Sequence:**
+```
+Phase 1 (Month 0-12): Human-Powered
+- Hire 5 nurses (€40k/year each)
+- They do symptom checking via chat
+- Collect data: symptoms → diagnosis → outcome
+- Learn: What questions work? What patients ask?
+
+Phase 2 (Month 13-18): Hybrid
+- Train AI on 50k human-patient conversations
+- AI handles 80% (simple cases)
+- Humans handle 20% (complex cases)
+- Cost: €200k humans + €200k AI = €400k
+- But capacity: 10x (from 10k to 100k users)
+
+Phase 3 (Month 19+): AI-First
+- AI handles 95%
+- Humans only for edge cases
+- Cost: €415k (fixed)
+- Capacity: Unlimited scaling
+```
+
+---
+
+### **ASSUMPTION #4: "Multi-sided marketplace is the model"**
+
+**Standard belief:**
+- Patients + Doctors + Clinics = network effects
+- Platform business = scalable
+- Marketplace = venture-scale business
+
+**REVERSED: "What if we're NOT a marketplace?"**
+
+**Exploration:**
+```
+Alternative Model: "Managed Healthcare Network"
+
+Instead of open marketplace:
+- YourMedic EMPLOYS doctors (W2, not contractors)
+- YourMedic OWNS clinic spaces (coworking model)
+- YourMedic CONTROLS entire experience
+
+Why:
+- Quality control: Every doctor is trained, vetted, aligned
+- Brand consistency: Same experience every time
+- Pricing power: Set prices, not doctors
+- Data ownership: All patient data, better AI
+- Defensibility: Hard to replicate (not just software)
+
+Example: One Medical (US) did this:
+- Employed 800+ doctors
+- Owned 125+ clinics
+- $1B valuation → Acquired by Amazon for $3.9B
+
+How YourMedic could do it:
+- Start with 1 clinic in Warsaw (rent, not buy)
+- Employ 10 doctors (full-time, €60k salary)
+- Patients pay €49/month membership
+- 500 members per clinic = €24.5k revenue
+- Break-even: 300 members per clinic
+- Scale: Add 1 clinic every 6 months
+
+Numbers:
+- Year 1: 1 clinic, 500 members, €24k/month, Break-even
+- Year 2: 3 clinics, 1,500 members, €73k/month, €350k profit
+- Year 3: 6 clinics, 3,000 members, €147k/month, €1M profit
+
+Wait... this is PROFITABLE faster than marketplace!
+```
+
+**Breakthrough Insight:**
+> **"Managed network" beats "open marketplace" for healthcare**
+> Healthcare is NOT like Uber (commoditized service, any driver works).
+> Healthcare IS like Michelin restaurants (quality matters, consistency critical).
+> Don't be Airbnb for doctors. Be Ritz-Carlton for patients.
+
+**Strategic Pivot:**
+```
+Marketplace Model (original):
+- Low margins (15% commission)
+- Low control (can't fire bad doctors)
+- Slow network effects (chicken-egg problem)
+- Differentiation hard (features copyable)
+
+Managed Model (reversed):
+- High margins (100% of patient payment)
+- Full control (employ doctors, set standards)
+- Fast growth (no chicken-egg, you ARE supply)
+- Differentiation easy (entire experience is proprietary)
+
+Risk: Capital intensive (clinic real estate)
+Solution: Start with coworking model (rent by hour, test before buying)
+```
+
+---
+
+### **ASSUMPTION #5: "Technology is the differentiator"**
+
+**Standard belief:**
+- Best tech = best product
+- Flutter, AI, ML = competitive advantage
+- Engineering excellence = success
+
+**REVERSED: "What if technology DOESN'T matter?"**
+
+**Exploration:**
+```
+The ZnanyLekarz Reality Check:
+- They have basic PHP website (15-year-old tech)
+- No AI, no mobile app (until 2019), no innovation
+- Yet: 8M users, €500M valuation, market leader
+
+Why they win:
+- Sales team: 50+ people calling clinics
+- Brand: €5M/year marketing budget
+- SEO: 10,000+ blog posts (rank #1 for "dermatologist Warsaw")
+- Relationships: Contracts with 500+ clinics
+
+Technology = 10% of success
+Distribution = 90% of success
+
+Applied to YourMedic:
+❌ Don't spend 12 months building perfect AI
+✅ Build "good enough" MVP in 2 months
+✅ Spend next 10 months on DISTRIBUTION:
+   - Hire 3 salespeople (€45k/year each)
+   - Run Google Ads (€20k/month budget)
+   - Create SEO content (100 blog posts)
+   - Cold call 100 clinics/month
+
+Technology can be mediocre if distribution is excellent
+(ZnanyLekarz proves this)
+```
+
+**Breakthrough Insight:**
+> **"Distribution > Technology" in healthcare marketplaces**
+> Don't hire 5 engineers. Hire 2 engineers + 3 salespeople.
+> Don't build for 12 months in stealth. Launch in 2 months, iterate publicly.
+> Don't optimize code. Optimize customer acquisition.
+
+**Resource Allocation Shift:**
+```
+Tech-First Plan (original):
+- Engineers: 5 × €55k = €275k
+- Salespeople: 0
+- Marketing: €10k/year
+- Time to market: 12 months
+- Year 1 revenue: €50k (slow ramp)
+
+Distribution-First Plan (reversed):
+- Engineers: 2 × €55k = €110k
+- Salespeople: 3 × €45k = €135k
+- Marketing: €100k/year (Google Ads)
+- Time to market: 2 months
+- Year 1 revenue: €300k (fast ramp)
+
+Same budget (€345k vs €285k + €10k)
+3x revenue (distribution beats tech)
+```
+
+---
+
+### **ASSUMPTION #6: "Offline-first is essential"**
+
+**Standard belief:**
+- Doctors work offline (hospitals, clinics)
+- Offline-first = better UX
+- Data caching = competitive advantage
+
+**REVERSED: "What if we're ONLINE-ONLY?"**
+
+**Exploration:**
+```
+The Online-Only Advantage:
+- Simpler architecture (no Hive, no conflict resolution)
+- Faster development (3 months vs 6 months)
+- Fewer bugs (no sync issues)
+- Lower costs (no complex infrastructure)
+
+Real-world usage:
+- 90% of doctors have WiFi in clinic
+- 5% use mobile hotspot
+- 5% work fully offline (hospitals)
+
+Question: Should we build complex offline system for 5%?
+
+Alternative: "Online-only with graceful degradation"
+- App requires internet (like Instagram)
+- If offline: Show cached calendar (read-only)
+- If offline: Queue actions, sync when online
+- Don't support: Full offline CRUD operations
+
+Why this works:
+- 95% of users never notice (always online)
+- 5% have degraded experience (but still functional)
+- Dev time: 3 months (vs 6 months offline-first)
+- Time to market: 3 months sooner = €75k saved burn
+
+Trade-off analysis:
+- Lose 5% of market (fully offline doctors)
+- Gain 3 months time to market (worth it?)
+- Save €75k burn (worth it?)
+
+Answer: YES, launch online-only first
+Add offline support in v2 if demand exists
+```
+
+**Breakthrough Insight:**
+> **"Online-only with graceful degradation" beats "offline-first complexity"**
+> Don't over-engineer for edge cases (5% offline users).
+> Launch simple, validate demand, add complexity later.
+> Speed to market > Perfect architecture.
+
+---
+
+### **ASSUMPTION #7: "B2C2B is the path (patients then clinics)"**
+
+**Standard belief:**
+- Get patients first (demand)
+- Clinics will follow (supply responds to demand)
+- Consumer traction = investor appeal
+
+**REVERSED: "What if we go B2B FIRST, ignore patients?"**
+
+**Exploration:**
+```
+The B2B-First Strategy:
+
+Don't market to patients at all (Year 1)
+Instead:
+- Sell to 10 clinics (€799/month subscription)
+- Clinics bring their existing patients (5,000 each)
+- Total: 50,000 patients (instant supply)
+
+Why this works:
+- Clinics have patient lists (marketing asset)
+- Clinics have trust (patients follow them)
+- Clinics have budget (B2B sales = €8k/month revenue)
+- No chicken-egg problem (clinics ARE the patients)
+
+Revenue math:
+B2C-First (original plan):
+- Month 6: 1,000 patients, 100 doctors, 500 appointments
+- Revenue: €3.75k (€7.50 commission per appointment)
+
+B2B-First (reversed):
+- Month 6: 10 clinics × €799 = €7.99k
+- Patients: 50,000 (clinics' existing base)
+- Appointments: 5,000 (10% adoption)
+- Revenue: €7.99k + €37.5k commission = €45k
+
+B2B-first = 12x revenue (Month 6)
+
+And patients are free (zero CAC, clinics bring them)
+```
+
+**Breakthrough Insight:**
+> **"B2B2C" beats "B2C2B" for healthcare marketplaces**
+> Sell to clinics first. Patients come for free.
+> Clinic's patient list = pre-qualified leads (€0 CAC).
+> Clinic partnership = instant 5,000-user launch (no cold start).
+
+**Go-to-Market Shift:**
+```
+Original Plan (B2C first):
+- Month 1-6: Build product + market to patients
+- Month 7-12: Recruit doctors once demand exists
+- Month 13+: Approach clinics once proven
+- Problem: Chicken-egg, slow ramp
+
+Reversed Plan (B2B first):
+- Month 1-3: Build product + sell to 1 pilot clinic
+- Month 4-6: Prove value with pilot (1,000 bookings)
+- Month 7-12: Scale to 10 clinics (€8k MRR)
+- Month 13+: Clinics' patients market via word-of-mouth
+- Advantage: No chicken-egg, fast revenue, free patient acquisition
+```
+
+---
+
+### **ASSUMPTION #8: "Fast iteration is critical"**
+
+**Standard belief:**
+- Ship fast, learn fast
+- Weekly releases
+- Agile > Waterfall
+
+**REVERSED: "What if we build ONCE, perfectly?"**
+
+**Exploration:**
+```
+The "Slow is Smooth, Smooth is Fast" Approach:
+
+Instead of MVP → iterate:
+- Spend 12 months building polished product
+- No users, no revenue, just building
+- Launch with complete feature set
+- No technical debt
+- Perfect architecture
+
+Why this might work:
+- Healthcare = trust (buggy MVP destroys trust)
+- Doctors = busy (won't give second chance)
+- Competition = weak (Docplanner hasn't innovated in 5 years)
+- Time = available (not a race, market is slow)
+
+Example: Epic Systems (US healthcare IT):
+- Spent 10 years building before scaling
+- No VC funding (bootstrapped)
+- Perfect product = won hospital contracts
+- Now: $3.8B revenue, 34% market share
+
+Applied to YourMedic:
+- Month 1-12: Build complete product
+  - Flutter app (iOS + Android + Web)
+  - AI symptom checker (certified!)
+  - Telehealth (integrated)
+  - Wearables (day 1)
+  - FHIR integration (compliant)
+  - Perfect UX (tested with 100 users)
+- Month 13: Launch to 50 clinics simultaneously
+  - Big bang launch (press coverage)
+  - "The most advanced health platform in Europe"
+  - Premium positioning (charge 2x competitors)
+
+Risk: Burn €300k before revenue
+Reward: Launch as category leader, not follower
+```
+
+**Breakthrough Insight:**
+> **"Slow build, fast scale" beats "fast build, slow scale" for complex products**
+> Healthcare is trust-based. One buggy release = brand death.
+> Better: Perfect product → instant trust → viral growth
+> Than: Buggy MVP → fix bugs → slow growth → pivot fatigue
+
+**But wait... this contradicts lean startup!**
+```
+Lean Startup says: MVP, iterate
+Assumption Reversal says: Perfect build, launch once
+
+Which is right?
+
+Answer: Depends on market
+- Consumer (Instagram): Lean startup wins (fast iteration, low trust)
+- Healthcare (YourMedic): Slow build wins (high trust, no second chance)
+
+Insight: Healthcare ≠ Consumer
+Apply different methodology
+```
+
+---
+
+### **ASSUMPTION #9: "Growth solves all problems"**
+
+**Standard belief:**
+- Scale = success
+- More users = more revenue = more funding = winning
+- Growth hides inefficiencies
+
+**REVERSED: "What if we DON'T grow?"**
+
+**Exploration:**
+```
+The "Lifestyle Business" Model:
+
+Reject VC, reject growth, reject scale
+Instead:
+- Stay small: 1 city (Warsaw), 10 clinics, 10,000 patients
+- Stay profitable: €50k/month revenue, €30k costs, €20k profit
+- Stay sustainable: €240k/year profit = €120k per founder (2 founders)
+
+Why this might be better:
+- No fundraising stress (12 months pitching investors)
+- No dilution (keep 100% equity)
+- No pressure (grow at your own pace)
+- No exit required (profit is the exit)
+- No burn rate crisis (profitable Month 6)
+
+Comparison:
+VC-Backed Path:
+- Years 1-3: Lose money (burn €2M)
+- Years 4-5: Break-even
+- Year 6-7: Profitable, but only 20% equity left
+- Year 8: Exit for €50M → Founders get €10M (20%)
+
+Bootstrap Path:
+- Year 1: Profitable (€240k/year)
+- Year 2: Profitable (€480k/year, 2x)
+- Year 3-10: Profitable (€960k/year, steady)
+- Total earned over 10 years: €6M (and keep 100% equity)
+
+Wait... bootstrap = €6M guaranteed
+VC = €10M possible, but risky (85% fail)
+
+Expected value:
+- Bootstrap: €6M × 100% = €6M
+- VC: €10M × 15% = €1.5M
+
+Bootstrap has HIGHER expected value!
+```
+
+**Breakthrough Insight:**
+> **"Lifestyle business" beats "VC-backed scale" for MOST founders**
+> Growth is a choice, not a requirement.
+> €6M guaranteed (bootstrap) > €10M possible (VC) for risk-averse founders.
+> Don't raise VC money unless you want to play the scale game.
+
+**The Uncomfortable Truth:**
+```
+Most founders raise VC because:
+- Social pressure ("everyone does it")
+- Vanity ("TechCrunch coverage")
+- Fear of missing out ("what if it's the next unicorn?")
+
+Not because:
+- It's optimal for wealth creation (bootstrap often better)
+- It's optimal for quality of life (VC = stress)
+- It's optimal for success probability (85% fail)
+
+Question: Do YOU want to build a rocket ship or a lifestyle business?
+Both are valid. Choose intentionally.
+```
+
+---
+
+### **ASSUMPTION #10: "Polish market first, then expand"**
+
+**Standard belief:**
+- Start local (Poland)
+- Prove model
+- Then expand to CEE (Czech, Slovakia, Hungary)
+- Geographic expansion = growth
+
+**REVERSED: "What if we launch GLOBAL from day 1?"**
+
+**Exploration:**
+```
+The "Global-First" Strategy:
+
+Instead of Poland-only:
+- Build multi-language from day 1 (Polish, English, German, Spanish)
+- Launch in 10 countries simultaneously (EU + UK)
+- Market: "The European Health Platform" (not just Poland)
+
+Why this might work:
+- Healthcare problems = universal (same pain everywhere)
+- Technology = borderless (same Flutter app, different language)
+- Regulations = similar (GDPR, EU MDR apply everywhere)
+- Competition = fragmented (no pan-European player)
+
+Example: Spotify did this:
+- Launched in 7 countries simultaneously (2008)
+- "Global from day 1" strategy
+- Became European champion (not just Swedish)
+- Now: 220M users, $40B valuation
+
+Applied to YourMedic:
+- Month 1-6: Build with i18n from start
+- Month 7: Launch in Warsaw, Berlin, Prague, Budapest simultaneously
+- Marketing: €5k/city (€20k total)
+- Target: 100 bookings/city (400 total)
+- Advantage: "The Airbnb of Healthcare" narrative
+
+Revenue math:
+Poland-only: 1,000 bookings/month × €7.50 = €7.5k
+4-country: 400 bookings/month × 4 cities × €7.50 = €12k
+
+Global-first = 60% more revenue (same effort)
+
+Risk: Spread too thin (4 cities vs 1)
+Mitigation: Hire 1 country manager per city (€40k/year)
+```
+
+**Breakthrough Insight:**
+> **"Global-first" beats "local-then-expand" in digital products**
+> Marginal cost of adding a country = LOW (just translation + 1 salesperson).
+> Marginal benefit = HIGH (4x market, diversification, investor narrative).
+> Don't think "Polish startup". Think "European startup, Poland-based".
+
+---
+
+### **💎 KEY INSIGHTS: Assumption Reversal**
+
+**Counterintuitive Truths Discovered:**
+
+1. **Curation > Selection**
+   - Don't show 500 doctors. Show THE 3 perfect matches.
+   - "Concierge algorithm" beats "marketplace algorithm"
+
+2. **Small > Scale (initially)**
+   - 10k premium users (€5M ARR) = 1M freemium users (€1M ARR)
+   - Luxury positioning = better unit economics
+
+3. **Humans > AI (Year 1-2)**
+   - Start with human symptom checkers (€200k)
+   - Build AI after you have 50k conversations (data goldmine)
+
+4. **Managed > Marketplace**
+   - Employ doctors, own clinics = full control
+   - One Medical model (acquired for $3.9B)
+
+5. **Distribution > Technology**
+   - 2 engineers + 3 salespeople > 5 engineers
+   - ZnanyLekarz has mediocre tech, excellent distribution = €500M valuation
+
+6. **Online-only > Offline-first (MVP)**
+   - 95% of doctors always online
+   - Build for 95%, add offline in v2
+
+7. **B2B First > B2C First**
+   - Sell to clinics, get patients for free (€0 CAC)
+   - Clinic's patient list = pre-qualified leads
+
+8. **Perfect Build > Fast Iterate (healthcare)**
+   - Healthcare = trust. Buggy MVP destroys trust.
+   - Better: 12-month build → flawless launch
+
+9. **Bootstrap > VC (for most)**
+   - €6M guaranteed (bootstrap) > €10M possible but risky (VC)
+   - Expected value favors bootstrap
+
+10. **Global > Local (digital products)**
+    - Launch in 4 countries simultaneously (same effort, 4x market)
+    - "European platform" > "Polish startup"
+
+---
+
+**Recommended Strategy (Synthesizing Reversals):**
+
+```
+PHASE 1: B2B Premium Launch (Months 1-6)
+- Build: Online-only MVP, good enough tech (not perfect AI)
+- Team: 2 engineers + 3 salespeople (distribution > tech)
+- Market: Warsaw only, premium positioning (luxury > mass)
+- Model: Managed network (employ 5 doctors, rent clinic space)
+- Target: 10 clinics × €799/month = €8k MRR
+- Result: Profitable Month 6 (bootstrap, no VC)
+
+PHASE 2: Curated Excellence (Months 7-12)
+- Product: Add "concierge algorithm" (3 perfect matches, not 500 doctors)
+- Team: Add human symptom checkers (5 nurses @ €40k/year)
+- Market: Expand to 3 cities (Warsaw, Krakow, Wroclaw)
+- Model: 30 clinics × €799 = €24k MRR
+- Data: Collect 50k symptom conversations (prepare for AI)
+- Result: €300k ARR, profitable
+
+PHASE 3: AI & Scale (Months 13-24)
+- Product: Train AI on 50k conversations, launch AI symptom checker
+- Team: Add 2 ML engineers (now affordable at €300k ARR)
+- Market: Launch in 4 EU countries (Poland, Czech, Germany, Austria)
+- Model: 100 clinics × €799 = €80k MRR
+- Certification: Begin medical device approval (€55k invested)
+- Result: €1M ARR, ready for Series A (if desired)
+
+Key Differentiators (from reversals):
+✅ Curation-first (not marketplace-first)
+✅ Premium positioning (not mass market)
+✅ B2B revenue (not B2C hope)
+✅ Human-powered initially (not AI-first)
+✅ Distribution focus (not tech focus)
+✅ Profitable path (not growth-at-all-costs)
+```
+
+---
+
 ## Idea Categorization
 
 ### Immediate Opportunities
