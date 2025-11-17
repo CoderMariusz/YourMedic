@@ -136,6 +136,249 @@
 
 ---
 
+#### Branch 2: Innowacyjne Funkcje - Jak rozwiązujemy problemy
+
+**🤖 AI SYMPTOM CHECKER - Inteligentny Triage**
+
+**3 Poziomy rozwoju:**
+
+**Poziom 1: Podstawowy MVP (0-6 miesięcy)**
+- Wywiad chorobowy krok po kroku (chatbot style)
+- Model ciała 3D do wskazania miejsca bólu
+- Kalendarz + intensywność (skala 1-10)
+- Output: 3-5 możliwych przyczyn z % prawdopodobieństwa
+- Alarm level: 🟢 może poczekać / 🟡 wizyta w 48h / 🔴 SOR natychmiast
+- Rekomendacja specjalisty konkretnego
+
+**Poziom 2: Zaawansowany (3-6 miesięcy)**
+- Pytania kontekstowe (AI zna historię pacjenta: alergie, choroby, leki)
+- Analiza zdjęć (wysypka, rana - basic dermatology recognition)
+- Sugestie badań przed wizytą
+- Edukacja (wideo/artykuł wyjaśniający)
+
+**Poziom 3: Pro (rok+)**
+- Multimodal AI (głos + tekst + obraz + wearables)
+- Predykcja zdrowotna ("Ryzyko cukrzycy: 15%")
+- Integracja z EHR (korelacja z wynikami laboratoryjnymi)
+
+**⚠️ KRYTYCZNE GRANICE:**
+- ❌ NIGDY definitywna diagnoza - zawsze "możliwe przyczyny"
+- ✅ Zawsze disclaimer: "To nie zastępuje wizyty u lekarza"
+- 🚨 Red flags auto-pilot: Objawy zagrożenia życia → natychmiast SOR
+- 📜 Certyfikacja: EU wyrób medyczny klasy IIa (jeśli "wspomaga diagnostykę")
+- 🎯 **Złoty środek:** AI jako triage tool, NIE narzędzie diagnostyczne (unika regulacji)
+- 💬 Marketing: "Inteligentny asystent zdrowotny" zamiast "AI doktor"
+
+---
+
+**🏪 MARKETPLACE LEKARZY - Uber dla Zdrowia**
+
+**A) Profil lekarza = Wizytówka 360°**
+- Zdjęcie, bio, certyfikaty (nr PWZ/GMC ZWERYFIKOWANY!)
+- Specjalizacje szczegółowe ("kardiolog dziecięcy", "kardiolog sportowy")
+- Języki, lokalizacje (multi-site)
+- **Cennik transparentny:**
+  - Konsultacja online: 150 PLN (30 min)
+  - Wizyta osobista: 200 PLN
+  - Badanie USG: 300 PLN
+- Dostępność real-time (4 tygodnie + badge "Dziś wolne o 18:00")
+
+**B) System rankingowy - 3 wymiary:**
+
+**1. Oceny pacjentów (rozdzielone kategorie):**
+- Profesjonalizm ⭐⭐⭐⭐⭐
+- Komunikacja ⭐⭐⭐⭐☆
+- Punktualność ⭐⭐⭐⭐⭐
+- Stosunek jakości do ceny ⭐⭐⭐☆☆
+
+**2. Algorytmiczny score (ukryty, wpływa na ranking):**
+- % potwierdzeń vs. odwołania przez lekarza
+- Średni czas odpowiedzi w chacie
+- Compliance z follow-up
+- Wskaźnik "cure rate" (czy pacjenci wracają z tym samym?)
+
+**3. Weryfikacja profesjonalna (badges):**
+- ✅ Zweryfikowany specjalista (sprawdzony nr licencji)
+- 🏆 Top 10% w specjalizacji
+- 📚 Publikacje naukowe
+- 🎓 Wykładowca akademicki
+
+**C) Filtry Smart:**
+- Standardowe: Miasto, specjalizacja, cena, data
+- Smart: "Przyjmuje dzieci/seniorów", języki, "Dostępny dziś/jutro", "NFZ/NHS", "Teleporada możliwa"
+
+**D) Ceny dynamiczne - Model hybrydowy:**
+- Bazowa cena = lekarz decyduje
+- Dynamic pricing **OPCJONALNIE:**
+  - ❌ "Surge pricing" jak Uber - ŹLE w medycynie
+  - ✅ "Early bird discount": -20% przy rezerwacji 2 tygodnie wcześniej
+  - ✅ "Last minute fill": -15% na jutro (wolny slot)
+  - ✅ Package deals: 3 wizyty kontrolne za 500 PLN zamiast 3x200
+
+**E) Prowizja platformy:**
+- B2C: 15-20% od wartości wizyty (płaci lekarz)
+- Subskrypcja: 99 PLN/miesiąc + 10% prowizji (zamiast 20%)
+- Freemium dla klinik: Do 50 wizyt/miesiąc gratis → potem pakiety
+
+---
+
+**🎯 PERSONALIZACJA - Każdy użytkownik inny świat**
+
+**A) DLA PACJENTA:**
+
+**Homepage adaptacyjny:**
+- Młoda osoba (18-30): Teleporada, dermatologia, ginekologia
+- Rodzic (30-45): Pediatra top widget, szczepienia, ortopeda
+- Senior (60+): Kardiolog, diabetolog, wizyty domowe, PROSTSZE UI (większe przyciski)
+
+**Rekomendacje lekarzy:**
+- Historia: "Odwiedziłeś 2 ortopedów → może neurochirurg?"
+- Lokalizacja: Domyślnie 5 km promień
+- Język preferowany: Priorytet anglojęzyczni lekarze
+
+**Smart reminders:**
+- "Ostatni raz u dentysty rok temu - czas na kontrolę!"
+- "Badania morfologii z marca warto powtórzyć"
+- "Za 3 dni kończy się recepta na [lek] - przedłużyć przez teleporadę?"
+
+**B) DLA LEKARZA:**
+
+**Dashboard customizable:**
+- Chirurg: "Zabiegi tego tygodnia", "Sala operacyjna", "Follow-up po zabiegach"
+- Psycholog: "Cykl terapii pacjenta X - sesja 5/10", "Notatki z poprzednich sesji"
+- Dermatolog: "Porównaj zdjęcia znamienia - wizyta 1 vs. 3"
+
+**AI asystent kontekstowy:**
+- "Pacjent X ma alergię na penicylinę" - popup przy przepisywaniu
+- "Ostatni CRP: 45 mg/L (podwyższony)" - auto-insert do opisu wizyty
+
+**C) DLA KLINIKI:**
+
+**Operational intelligence:**
+- "Piątki 16-18: 80% no-shows → zmniejszyć sloty?"
+- "Dr Kowalski najwyższy patient satisfaction → więcej godzin?"
+- "Sala 3 niewykorzystana środy → dodać fizjoterapię"
+
+**Źródła danych do personalizacji:**
+- Demograficzne: Wiek, płeć, lokalizacja
+- Historia wizyt: Specjalizacje, częstotliwość, preferencje
+- Dane zdrowotne: Choroby przewlekłe, alergie, ryzyko (za zgodą!)
+- Behavior tracking: Kliknięcia, wyszukiwania, odwołania
+- Wearables: Garmin/Apple Watch → "Puls spoczynkowy rośnie → kardiolog?"
+
+---
+
+**⚕️ FOLLOW-UP SYSTEM - 50% Auto + 50% Human Touch**
+
+**🤖 CO AUTOMATED:**
+
+**Post-wizyta (1h po):**
+- SMS: "Jak się czujesz? [Link do ankiety]"
+- Auto-zalecenia w PDF (wygenerowane przez lekarza)
+
+**2-3 dni po:**
+- Push: "Czy zacząłeś leki? [Tak/Nie/Przypomnij jutro]"
+- Jeśli zabieg: "Czy rana się goi? [Pokaż zdjęcie]" → AI ocenia → Escalate jeśli problem
+
+**Tydzień po (zabieg):**
+- Email: "Czas na kontrolę - umów się [Link]"
+
+**Chroniczne (np. cukrzyca):**
+- Co miesiąc: "Czas zmierzyć HbA1c - laboratorium [Mapa]"
+- Co tydzień: "Poziomy cukru? [Wpisz wyniki]" → wykres trendu
+
+**👨‍⚕️ CO HUMAN TOUCH:**
+
+**Lekarz decyduje:**
+- Czy follow-up potrzebny (checkbox przy zamykaniu wizyty)
+- Kiedy (3 dni / tydzień / miesiąc)
+- Czy automated reminder czy osobisty telefon/czat
+
+**Nurse/Asystent kliniczny:**
+- Pielęgniarka dzwoni do pacjentów wysokiego ryzyka
+- Chatbot eskaluje: "Pacjent: gorączka 39°C po zabiegu" → Alert dla lekarza
+
+**Gamification:**
+- "5 wizyt kontrolnych wykonanych - zniżka 10%!"
+- "30 dni przyjmowania leków codziennie 🎉"
+
+---
+
+**⌚ INTEGRACJE Z WEARABLES - Od danych do akcji**
+
+**Jakie dane zbierać?**
+
+**Tier 1: Podstawowe (Apple Health, Google Fit):**
+- Kroki, kalorie, sen
+- Puls spoczynkowy, HRV
+- Aktywność (bieganie, siłownia)
+
+**Tier 2: Medyczne (Garmin, Oura, Fitbit):**
+- SpO2 (saturacja krwi)
+- EKG (Apple Watch/Withings)
+- Temperatura ciała (Oura)
+- Stres (HRV-based)
+
+**Tier 3: Dedykowane medyczne (API):**
+- Glukometr (Freestyle Libre)
+- Ciśnieniomierz Bluetooth
+- Waga z % tłuszczu (Withings)
+
+**Co z nimi robić?**
+
+**A) Pacjent widzi:**
+- Dashboard zdrowia: Wykresy tygodniowe/miesięczne
+- Trendy + alerty: "Puls spoczynkowy wzrósł 15% → sprawdź?"
+- Korelacje: "Gdy śpisz <6h, poziom cukru rano wyższy" (dla diabetyków)
+
+**B) Lekarz widzi (za zgodą):**
+- Przed wizytą: "Pacjent X - puls śr. 95 bpm (za wysoki), sen 5h/noc"
+- Podczas wizyty: "Wykres HRV z 30 dni"
+- AI suggestions: "Wysoki stres + bóle głowy → nadciśnienie? Zalecić holter?"
+
+**C) System reaguje:**
+
+**Automated alerts:**
+- SpO2 < 90% przez 10 min → "Wszystko OK? [Wezwać pomoc]"
+- Puls >120 bpm w spoczynku → "Zmierz ciśnienie, zgłoś się do lekarza"
+
+**Preventive care:**
+- "Nie śpisz dobrze od 2 tygodni → teleporada psychiatra?" (mental health!)
+
+**Research:**
+- Anonimizowane dane do badań (za zgodą) - wartościowe dla pharma
+
+**Privacy first:**
+- ✅ Opt-in: Użytkownik wybiera co udostępnia
+- ✅ Granular control: "Lekarz widzi tylko puls i sen, nie aktywność"
+- ✅ GDPR compliance: Prawo do usunięcia danych
+
+---
+
+**🎯 PRIORYTETYZACJA IMPLEMENTACJI:**
+
+**MVP (0-6 miesięcy):**
+- ✅ AI Symptom Checker Poziom 1
+- ✅ Marketplace z podstawowym rankingiem
+- ✅ Podstawowe follow-up (SMS/email reminders)
+
+**Phase 2 (6-12 miesięcy):**
+- ✅ Wearables Tier 1 integration
+- ✅ Personalizacja homepage
+- ✅ AI asystent dla lekarza (opis wizyty)
+
+**Phase 3 (rok+):**
+- ✅ Advanced wearables + predictive health
+- ✅ Dynamic pricing + marketplace gamification
+- ✅ Pełny human + AI hybrid follow-up
+
+**💎 KEY INSIGHT Branch 2:**
+> **YourMedic to nie tylko "umów wizytę".**
+> **To platforma, która łączy AI, wearables i telemedycynę w jeden inteligentny ekosystem,**
+> **który dba o zdrowie pacjenta 24/7 - od objawów, przez wizytę, po follow-up i prewencję.**
+
+---
+
 ## Idea Categorization
 
 ### Immediate Opportunities
