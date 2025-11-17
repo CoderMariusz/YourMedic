@@ -6413,314 +6413,36 @@ _Key realizations from the session_
 - Month 13-18: AI transition (train model, hybrid human+AI, phase out 3 nurses)
 - **Key milestone: 50k conversations by Month 12, ready for AI training**
 
-#### #3 Priority: Online-Only MVP (Skip Offline-First Architecture)
+#### #3 Priority: {{priority_3_name}}
 
-**Rationale:**
-- Saves 4 months time-to-market (critical for first-mover advantage vs Docplanner clones)
-- Saves €80k development costs (offline sync, conflict resolution, CRDT implementation)
-- Poland internet coverage 94% = only 6% of users affected (acceptable for MVP)
-- Avoids premature optimization (Donald Knuth: "root of all evil")
-- Enables pivot flexibility (easier to change online-only architecture than offline-first)
-- Aligns with "speed to market w MVP" strategy specified by founder
-- Can add offline-first in Month 18-24 if data shows 6% causes significant churn
-
-**Next Steps:**
-
-**Month 1-2: MVP Architecture Decision**
-1. Validate Poland internet coverage assumption
-   - Research: GUS (Polish statistics) reports on internet penetration by region
-   - Survey: First 100 beta users "How often do you experience connectivity issues in clinics/at home?"
-   - Decision criteria: If >10% report frequent issues, reconsider offline-first; if <10%, proceed online-only
-2. Define online-only architecture
-   - Stack: NestJS (backend), PostgreSQL (database), Redis (caching), React (web), Flutter (mobile)
-   - Real-time: WebSocket for chat, Server-Sent Events for notifications
-   - Error handling: Graceful degradation (show "Connection lost, retrying..." banner), queue failed requests
-   - Offline state: Read-only cache for last-viewed data (appointments today, doctor profiles), no write operations
-3. Set performance benchmarks
-   - API latency: <200ms p95 (Poland LTE average 50ms, 4G 30ms)
-   - Page load: <2s on 3G connection
-   - Video call quality: 720p minimum, 1080p preferred (Twilio adaptive bitrate)
-
-**Month 3-6: Build & Launch Online-Only MVP**
-4. Implement core features (online-only)
-   - Patient app: Search doctors, book appointments, video consultations, payments
-   - Doctor app: Manage schedule, patient list, video consultations, medical notes
-   - Clinic admin: Onboarding, analytics, billing
-5. Test on various network conditions
-   - Tool: Chrome DevTools network throttling (Fast 3G, Slow 3G, Offline)
-   - Fix: Optimize bundle size (<2MB), implement retry logic, add connection status indicators
-6. Launch with beta users (Month 6)
-   - Target: 100 patients, 10 doctors, 5 clinics
-   - Pre-launch: "We're online-first for speed, working on offline mode for later" (set expectations)
-   - Measure: Connection-related complaints (<10 target), video call success rate (>90% target)
-
-**Month 7-12: Iterate & Decide on Offline-First**
-7. Collect data on connectivity impact
-   - Metrics: % users experiencing connectivity issues, churn rate by connectivity, NPS by connectivity
-   - Qualitative: User interviews "Would you use YourMedic more if it worked offline?"
-8. Decision gate: Build offline-first or not?
-   - YES if: Churn >5% due to connectivity OR expanding to rural areas OR competitive pressure
-   - NO if: Connectivity complaints <5% of issues AND churn not correlated with connectivity
-9. If YES, plan offline-first rewrite (Month 13-18)
-   - Budget: €80k (6 months, 2 engineers)
-   - Architecture: Hive (mobile local DB), CRDT (conflict resolution), background sync
-
-**Resources Needed:**
-- Month 1-6: Engineering already budgeted in Priority #1 (€48k), infrastructure €4.8k
-- Month 7-12: Data analyst €12k + user research €3k = €15k
-- Month 13-18 (conditional): €53k IF offline-first needed (vs €80k upfront = €27k net savings)
-- **Total incremental cost: €19.8k committed, €53k conditional**
-
-**Expected Outcomes:**
-- Time-to-market: 4 months faster (Month 6 launch vs Month 10 if offline-first upfront)
-- Cost savings: €27k-80k saved by deferring (34-100% savings if never needed)
-- User satisfaction: >90% satisfied despite online-only (if Poland 94% internet coverage holds)
-- Strategic flexibility: Can pivot product direction without sunk cost of complex offline architecture
-- **Decision quality: Data-driven decision Month 12 on whether offline-first is truly needed**
-
-**Timeline:**
-- Month 1-2: Architecture validation & decision (online-only confirmed)
-- Month 3-6: Build & launch online-only MVP (100 beta users)
-- Month 7-12: Monitor connectivity impact, collect data
-- Month 12: Decision gate (build offline-first or not)
-- Month 13-18 (conditional): Build offline-first V2 if data justifies
-- **Key milestone: 4 months faster launch, €27k-80k cost savings**
+- Rationale: {{priority_3_rationale}}
+- Next steps: {{priority_3_steps}}
+- Resources needed: {{priority_3_resources}}
+- Timeline: {{priority_3_timeline}}
 
 ## Reflection and Follow-up
 
 ### What Worked Well
 
-**Progressive Flow Methodology:**
-- Four complementary techniques (Mind Mapping → What If → Six Hats → Assumption Reversal) built on each other naturally
-- Mind Mapping provided comprehensive foundation (pain points, features, technical approaches)
-- What If Scenarios explored edge cases and radical possibilities (viral growth, pandemic, data breach)
-- Six Thinking Hats brought structured multi-perspective analysis (facts, emotions, optimism, caution, creativity, process)
-- Assumption Reversal challenged conventional wisdom and revealed counterintuitive strategies (B2B>B2C, humans>AI initially, bootstrap>VC)
-
-**Divergent Phase Effectiveness:**
-- Generated 60+ distinct ideas across immediate opportunities, future innovations, and moonshots
-- Uncovered 20+ key insights that challenged initial assumptions
-- Explored both optimistic scenarios (viral growth, FHIR mandate) and challenging scenarios (competition, data breach, regulatory shutdown)
-- Balanced creative ideation (AI doctor avatars, holographic telemedicine) with practical constraints (unit economics, regulatory risks, realistic success probability)
-
-**Depth of Analysis:**
-- 6,500+ lines of detailed documentation (equivalent to a comprehensive product brief)
-- Code examples in TypeScript, Dart, Python, SQL for technical validation
-- Financial projections with specific unit economics (LTV:CAC ratios, burn rates, profitability timelines)
-- Competitive analysis (Docplanner, One Medical, Babylon Health, ZnanyLekarz)
-- Regulatory research (EU MDR, GDPR, FHIR/HL7)
-
-**Insight Quality:**
-- Identified fundamental strategic pivots: B2B-first beats B2C-first (12x revenue Month 6)
-- Discovered cost savings: Humans €200k vs AI €415k in Year 1-2 (€215k savings)
-- Challenged premature optimization: Offline-first adds 4 months + €80k for 6% of users
-- Calculated realistic success probability: 15% (vs typical startup optimism bias of 80%+)
-- Synthesized 3-phase strategy: B2B premium launch → curated excellence → AI & scale
+{{what_worked}}
 
 ### Areas for Further Exploration
 
-**Go-to-Market Strategy:**
-- B2B sales playbook: Exact scripts, objection handling, pricing negotiation strategies for clinic sales
-- B2C patient acquisition: If B2B doesn't work, what's the fallback? SEO, content marketing, paid ads, partnerships?
-- Launch city selection: Is Warsaw optimal or should we consider Krakow (student city), Wroclaw (tech hub), Gdansk (wealthy)?
-- Pricing optimization: €799/month clinic subscription - too high? Too low? Should it be per-doctor (€99/month × 10 doctors)?
-
-**Competitive Positioning:**
-- Detailed SWOT analysis: YourMedic vs Docplanner, ZnanyLekarz, Luxmed, Medicover
-- Competitive moats: What prevents Docplanner from copying us? Network effects? Data moat? Regulatory barriers?
-- Partnership vs compete: Should we partner with Luxmed/Medicover (white-label) or compete directly?
-- International expansion: Which country after Poland? Germany, Czech Republic, Slovakia, or skip Poland entirely?
-
-**Technical Architecture Deep Dive:**
-- Database schema design: Multi-tenancy schema structure, RLS policies, migration strategy
-- Security architecture: Penetration testing plan, GDPR compliance checklist, encryption implementation
-- Scalability testing: Load testing plan (10k → 100k → 1M users), database sharding strategy, caching layers
-- Medical device certification process: Step-by-step timeline, required documentation, Notified Body selection
-
-**Team & Organization:**
-- Founding team composition: Technical co-founder? Medical advisor? Business/sales co-founder?
-- Early hires priority: Should we hire engineers or salespeople first? What about a designer?
-- Remote vs office: Warsaw office or fully remote team? Hybrid model?
-- Equity split: Founder equity, early employee equity pool (10-15%?), advisor equity (0.25-1% each?)
-
-**Funding Strategy:**
-- Bootstrap vs seed funding: Detailed pro/con analysis, when to raise, from whom (angels, VCs, accelerators)?
-- Revenue-based financing: Alternative to equity dilution - borrow against MRR (Pipe, Clearco)
-- Grants and subsidies: EU health innovation grants, Polish startup subsidies (PARP, NCBiR)
-- Unit economics optimization: Specific tactics to reduce CAC from €50 to <€10 or increase LTV from €30 to >€150
-
-**Regulatory & Legal:**
-- Medical liability insurance: Coverage needed, estimated costs (€5k-20k/year?)
-- Data protection officer: When required? Hire internally or outsource? Costs?
-- Terms of service & privacy policy: GDPR-compliant templates, lawyer review costs
-- Medical device post-market surveillance: Ongoing requirements after certification (incident reporting, updates)
-
-**Product Roadmap Prioritization:**
-- MVP feature cuts: What can we remove from MVP to launch faster? (e.g., patient medical history, doctor notes, clinic analytics?)
-- V2 features: After MVP, what's next? EHR integration? Wearables? Prescription management?
-- Technical debt management: When to refactor vs keep building? Offline-first decision gates?
-- Innovation vs iteration: How much time for "moonshots" vs incremental improvements?
+{{areas_exploration}}
 
 ### Recommended Follow-up Techniques
 
-**From BMM Discovery Phase:**
-
-1. **Research Workflow** (Next logical step in BMM Enterprise Method)
-   - Competitive analysis deep dive: Docplanner, ZnanyLekarz, Luxmed, Medicover teardowns
-   - User research: Interview 20 patients, 20 doctors, 10 clinic owners about pain points
-   - Market sizing validation: TAM/SAM/SOM calculations, Poland vs international markets
-   - Regulatory research: EU MDR certification process, GDPR compliance requirements, FHIR/HL7 standards
-   - Technology evaluation: NestJS vs other frameworks, PostgreSQL vs other databases, Twilio vs competitors
-
-2. **Product Brief Workflow** (Synthesize brainstorm + research into product spec)
-   - Product vision & mission statement
-   - User personas: Patient (3 types), Doctor (2 types), Clinic admin (2 types)
-   - User stories & acceptance criteria for MVP
-   - Product roadmap: MVP (Month 0-6), V2 (Month 7-12), V3 (Month 13-24)
-   - Success metrics dashboard: MAAC, LTV:CAC, NPS, churn rate, MRR growth
-
-**Additional Brainstorming Techniques:**
-
-3. **SWOT Analysis** (Competitive positioning)
-   - Strengths: What are our unfair advantages? (technology, distribution, team, timing?)
-   - Weaknesses: What are our vulnerabilities? (limited capital, no brand, small team?)
-   - Opportunities: What market trends favor us? (FHIR mandate, pandemic preparedness, wearables adoption?)
-   - Threats: What could kill us? (Docplanner copies us, Google/Apple enter market, regulatory changes?)
-
-4. **Business Model Canvas** (Clarify business model)
-   - Value propositions: What value do we deliver to patients, doctors, clinics?
-   - Customer segments: Who are our customers? (B2B clinics, B2C patients, both?)
-   - Channels: How do we reach customers? (salespeople, SEO, partnerships, paid ads?)
-   - Revenue streams: How do we make money? (subscriptions, commissions, freemium, SaaS?)
-   - Cost structure: What are our major costs? (engineering, sales, marketing, operations?)
-   - Key resources: What do we need? (technology, brand, network, regulatory approvals?)
-   - Key activities: What must we do? (product development, sales, customer support, compliance?)
-   - Key partnerships: Who are our partners? (EHR vendors, insurance companies, medical associations?)
-   - Customer relationships: How do we acquire, retain, grow customers?
-
-5. **Jobs-to-be-Done Framework** (Deeper user understanding)
-   - Functional jobs: What task is the user trying to accomplish? (book appointment, diagnose symptoms, manage schedule)
-   - Emotional jobs: How does the user want to feel? (confident, in control, cared for, efficient)
-   - Social jobs: How does the user want to be perceived? (competent doctor, responsible patient, modern clinic)
-   - Constraints: What prevents the user from switching? (switching costs, habits, regulations, trust)
-
-6. **Pre-Mortem Analysis** (Risk mitigation)
-   - Scenario: "It's Month 24, YourMedic failed. What happened?"
-   - Identify top 10 failure modes and their probabilities
-   - Design specific mitigations for each failure mode
-   - Create early warning indicators (when to pivot or shut down)
+{{recommended_techniques}}
 
 ### Questions That Emerged
 
-**Strategic Questions:**
-1. **Bootstrap or raise seed funding?** Expected value analysis suggests bootstrap (€6M) > VC (€1.5M), but what if we need €162k to start and don't have it?
-2. **B2B-first or B2C-first?** Strong evidence for B2B (12x revenue), but what if clinics don't want to pay €799/month? Is freemium + upsell safer?
-3. **Warsaw-only or multi-city from day 1?** Focus suggests Warsaw, but Poland is small - should we launch in Germany/Czech Republic simultaneously?
-4. **Managed network or marketplace?** One Medical model ($3.9B) vs Docplanner model (€500M) - which fits our resources and market better?
-5. **Premium positioning or mass market?** 10k premium users = €5M ARR, but is Warsaw premium market big enough? What if we target wrong segment?
-
-**Product Questions:**
-6. **What's the absolute minimum MVP?** Can we launch with just booking + video calls (no symptom checker, no EHR, no wearables) in Month 3 instead of Month 6?
-7. **Should symptom checker be human, AI, or hybrid from day 1?** Humans cheaper Year 1-2, but what if patients expect AI? Does "talk to nurse" feel premium or cheap?
-8. **Online-only or offline-first?** Strong case for online-only, but what if 6% churn due to connectivity kills us? Can we afford to lose 6% of users?
-9. **Which specialties for managed network doctors?** GP + Pediatrician + Dermatologist + Gynecologist covers 60% of appointments, but what about remaining 40%?
-10. **White-label or own brand?** Should we build YourMedic brand OR sell white-label to Luxmed/Medicover immediately for guaranteed revenue?
-
-**Technical Questions:**
-11. **NestJS + Python or NestJS-only?** Hybrid architecture adds complexity - can we do ML in Node.js initially (TensorFlow.js) and defer Python service?
-12. **Multi-tenancy schema-based or database-per-tenant?** Schema-based scales to 10k tenants, but what if one tenant's data breach contaminates others psychologically?
-13. **Build video calls or use embedded Twilio?** Embedded Twilio faster (1 week), but custom WebRTC gives control - worth 3 months extra development?
-14. **Medical device certification class IIa or aim for class I?** Class IIa (€55k, 12 months) required for personalized recommendations, but can we design AI to qualify as class I (€10k, 3 months)?
-15. **FHIR integration now or later?** FHIR unlocks EHR connectivity (10x value), but costs €50k per integration - should we prioritize or defer until Series A?
-
-**Team & Organization Questions:**
-16. **Solo founder or find co-founders?** Solo founder = 100% equity but slower progress. Co-founder (technical or sales) = 50% equity but 2x faster?
-17. **Hire salespeople or engineers first?** Distribution beats technology suggests sales, but can't sell without product - what's the sequencing?
-18. **Warsaw office or remote team?** Office builds culture (€3k/month), remote saves money - which matters more for healthcare startup?
-19. **Medical advisor equity - how much?** Medical advisors critical for credibility and regulation - 0.5%? 1%? 2%? Board seat?
-20. **When to hire first employee?** Month 1 (sooner = faster progress), Month 6 (after validation), or Month 12 (after profitability)?
-
-**Market & Competition Questions:**
-21. **Why hasn't Docplanner built AI symptom checker after 10 years?** Is it regulatory risk, lack of vision, or not valuable? Should we interpret this as warning sign?
-22. **What would Google/Apple healthcare product look like?** If they enter, can we survive? Is acquisition exit realistic (€30-50M) or will we be crushed?
-23. **Is Poland healthcare market too small?** €450M TAM - even at 10% market share (€45M revenue) is that big enough for VC returns (need €100M+ exit)?
-24. **Partnership with Luxmed/Medicover - threat or opportunity?** They have 3M patients - partner (white-label €10k/month) or compete (marketplace)?
-25. **International expansion timing - Month 12, 24, or never?** Poland-first risks slow growth, global-first risks unfocused execution - what's optimal?
+{{questions_emerged}}
 
 ### Next Session Planning
 
-**Suggested topics:**
-
-1. **Research Workflow** (1-2 weeks)
-   - Competitive teardown: Docplanner, ZnanyLekarz, Luxmed, Medicover
-   - User interviews: 20 patients, 20 doctors, 10 clinic owners
-   - Market sizing: TAM/SAM/SOM validation
-   - Regulatory deep dive: EU MDR, GDPR, FHIR/HL7
-
-2. **Product Brief Workflow** (1 week)
-   - Synthesize brainstorm + research into product spec
-   - Define MVP scope (absolute minimum for Month 6 launch)
-   - Create user stories & acceptance criteria
-   - Build product roadmap (MVP → V2 → V3)
-
-3. **Go-to-Market Strategy Session** (1 week)
-   - B2B sales playbook (scripts, pricing, objection handling)
-   - B2C patient acquisition (SEO, content, paid ads, partnerships)
-   - Launch city selection (Warsaw vs Krakow vs Wroclaw vs international)
-   - Pricing optimization (€799/month vs per-doctor vs freemium)
-
-4. **Technical Architecture Deep Dive** (1 week)
-   - Database schema design (multi-tenancy, RLS, migrations)
-   - Security architecture (GDPR, encryption, penetration testing)
-   - Scalability plan (10k → 100k → 1M users)
-   - Medical device certification roadmap (class I vs IIa, timeline, costs)
-
-5. **Financial Modeling & Funding Strategy** (1 week)
-   - Build 3-year financial model (revenue, costs, burn, profitability)
-   - Bootstrap vs seed funding decision
-   - Unit economics optimization (reduce CAC, increase LTV)
-   - Funding sources (angels, VCs, accelerators, grants, RBF)
-
-**Recommended timeframe:**
-- Research workflow: Start within 1 week (while brainstorm insights are fresh)
-- Product brief: Start within 2 weeks (after research completion)
-- Planning phase complete: Within 4-6 weeks (before Month 1 execution)
-- Decision deadlines: Co-founder search (Week 2), funding strategy (Week 4), MVP scope freeze (Week 6)
-
-**Preparation needed:**
-
-**For Research Workflow:**
-- List of 100 Warsaw clinics (target ICP: 3-10 doctors, no online booking, 500-2000 patients/month)
-- Recruit 20 patients for interviews (€20 incentive each = €400 budget)
-- Recruit 20 doctors for interviews (€50 incentive each = €1,000 budget)
-- Recruit 10 clinic owners for interviews (€100 incentive each = €1,000 budget)
-- Prepare interview scripts (Jobs-to-be-Done format)
-- Set up Docplanner, ZnanyLekarz accounts for competitive analysis
-- **Total budget for user research: €2,400**
-
-**For Product Brief:**
-- Aggregate all brainstorming insights (already done - 6,500+ lines)
-- Synthesize user research findings
-- Prioritization framework (RICE: Reach, Impact, Confidence, Effort)
-- Figma account for wireframes/mockups (€15/month)
-
-**For Go-to-Market:**
-- B2B sales training (read "The Mom Test", "Predictable Revenue")
-- B2C growth frameworks (read "Traction", "Hacking Growth")
-- Pricing research (SaaS pricing benchmarks, healthcare SaaS comparables)
-- Competitor pricing analysis (Docplanner, ZnanyLekarz public pricing)
-
-**For Technical Architecture:**
-- PostgreSQL multi-tenancy tutorial (Citus Data, AWS RDS)
-- GDPR compliance checklist (ICO, CNIL, UODO resources)
-- EU MDR certification guide (BSI, TÜV SÜD, MDR consultant)
-- FHIR/HL7 integration examples (HAPI FHIR, Mirth Connect)
-
-**For Financial Modeling:**
-- Excel/Google Sheets financial model template
-- SaaS financial benchmarks (ChartMogul, SaaS Capital, OpenView)
-- Healthcare startup benchmarks (Rock Health, CB Insights)
-- Polish startup funding landscape (Market One Capital, SMOK Ventures, bValue)
+- **Suggested topics:** {{followup_topics}}
+- **Recommended timeframe:** {{timeframe}}
+- **Preparation needed:** {{preparation}}
 
 ---
 
