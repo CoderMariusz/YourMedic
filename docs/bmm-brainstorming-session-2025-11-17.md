@@ -379,6 +379,437 @@
 
 ---
 
+#### Branch 3: Podejścia Techniczne - Architektura i Implementacja
+
+**🎯 Central Question:** JAK zbudować platformę skalowalna, bezpieczną i zgodną z regulacjami medycznymi dla 3 grup użytkowników?
+
+---
+
+**📱 FLUTTER CROSS-PLATFORM - Strategia Offline-First**
+
+**A) Co MUSI działać offline - Podział według ról:**
+
+**👤 PACJENT:**
+
+✅ **MUSI działać offline:**
+- Historia wizyt (ostatnie 6 miesięcy) - readonly
+- Lista leków z przypomnieniami - readonly, notyfikacje działają
+- Dokumenty PDF (zalecenia, wyniki) - cache lokalny
+- Historia objawów w Symptom Checker - zapisz lokalnie, wyślij później
+- Podstawowe dane profilu (imię, data urodzenia, alergie, grupa krwi)
+
+❌ **NIE działa offline:**
+- Umawianie nowych wizyt (live calendar)
+- Płatności
+- Czat/wideokonsultacja
+- Wyszukiwanie lekarzy
+- AI Symptom Checker (wymaga ML API)
+
+**Storage strategy:**
+- Hive dla structured data (wizyty, leki, profil)
+- Cache lokalny PDF (max 100 MB)
+- Background sync co 24h (WorkManager)
+
+**👨‍⚕️ LEKARZ:**
+
+✅ **MUSI działać offline (critical workflow):**
+- Kalendarz wizyt DZIŚ + jutro (pełne dane pacjentów)
+- Karty pacjentów z dzisiejszego dnia:
+  - Podstawowe dane (ID, imię, kontakt)
+  - Historia chorób (12 miesięcy)
+  - Aktualne leki
+  - **Alergie ⚠️ (ZAWSZE dostępne)**
+  - Ostatnie 3 wizyty
+- Tworzenie notatek offline:
+  - SOAP notes zapisane lokalnie z flagą `pending_sync`
+  - Upload przy powrocie internetu
+  - Nie blokuje kolejnych wizyt
+- Wystawianie recept DRAFT:
+  - Draft lokalnie
+  - Wysyłka do e-recepty gdy online
+
+❌ **NIE działa offline:**
+- Dodawanie NOWYCH pacjentów
+- Pełna historia >12 miesięcy
+- Powiadomienia SMS
+- Wideokonsultacje
+- Integracja EHR/lab
+
+**Prefetch strategy:**
+```dart
+// Na początku dnia lub przy otwarciu app
+Future<void> prefetchTodayData() async {
+  if (await hasConnection()) {
+    // Pobierz wizyty dziś + jutro
+    final appointments = await api.getAppointments(
+      from: DateTime.now(),
+      to: DateTime.now().add(Duration(days: 1))
+    );
+
+    // Dla każdej wizyty - dane pacjenta
+    for (var apt in appointments) {
+      final patientData = await api.getPatientEssentials(apt.patientId);
+      await hive.savePatientCache(patientData);
+    }
+  }
+}
+
+// Po wizycie - queue do sync
+Future<void> saveVisitNote(VisitNote note) async {
+  await hive.saveVisitNote(note, synced: false);
+
+  if (await hasConnection()) {
+    await _syncPendingNotes();
+  }
+}
+```
+
+**Cache management:**
+- Max 500 MB (30 dni wizyt + dokumenty)
+- Auto-clean >60 dni
+- Priorytet: dzisiejsze > historia > dokumenty
+
+**🏥 KLINIKA/ADMIN:**
+- ✅ Offline: Podstawowy dashboard (cached stats), lista personelu
+- ❌ Online-first: Real-time stats, edycja grafików, zarządzanie dostępami
+
+---
+
+**B) Synchronizacja Konfliktów - Konkretne Scenariusze:**
+
+**Scenariusz 1: Pacjent edytuje dane offline + online jednocześnie**
+
+**Problem:**
+- Komórka offline: zmiana adresu na "Nowa 10"
+- Żona online: zmiana na "Stara 5"
+- Konflikt przy sync
+
+**Rozwiązanie: Last-Write-Wins + timestamp**
+```dart
+// Backend endpoint
+PUT /api/patient/profile
+{
+  "address": "Nowa 10",
+  "lastModified": "2025-11-17T10:30:00Z"
+}
+
+// Backend check:
+if (request.lastModified < dbRecord.lastModified) {
+  return {
+    status: "conflict",
+    serverVersion: dbRecord,
+    yourVersion: request
+  };
+}
+
+// Flutter handling:
+try {
+  await api.updateProfile(localProfile);
+} on ConflictException catch (e) {
+  showDialog(
+    title: "Konflikt danych",
+    content: "Dane zmienione na innym urządzeniu. Która wersja poprawna?",
+    actions: [
+      "Zachowaj moją (${e.yourVersion.address})",
+      "Użyj nowszej (${e.serverVersion.address})"
+    ]
+  );
+}
+```
+
+**Strategy:**
+- Większość pól: Last-Write-Wins auto (adres, telefon)
+- Krytyczne pola: Manual resolve (alergie, grupa krwi)
+
+**Scenariusz 2: Lekarz offline zapisuje, pacjent online odwołał**
+
+**Problem:**
+- Lekarz offline prowadzi wizytę, zapisuje notatkę
+- Pacjent online odwołał 5 min wcześniej
+- Co z notatką przy sync?
+
+**Rozwiązanie: Server reconciliation**
+```python
+# Backend check
+if appointment.status == "cancelled":
+  # NIE odrzucaj notatki!
+  appointment.status = "visit_happened_despite_cancellation"
+  send_alert_to_admin()
+  return {
+    "warning": "Pacjent odwołał, ale wizyta się odbyła",
+    "action_required": true
+  }
+```
+
+**Best practice:**
+- Prefetch rano → lekarz wie kto odwołał
+- Przycisk "Restore appointment" przed zapisem notatki
+
+**Scenariusz 3: Field-level merge dla notatek**
+
+```javascript
+// Backend merge strategy
+function mergeVisitNotes(serverNote, clientNote) {
+  return {
+    // Tekst: append jeśli różne
+    diagnosis: mergeSections(serverNote.diagnosis, clientNote.diagnosis),
+
+    // Leki: union (bez duplikatów)
+    medications: union(serverNote.medications, clientNote.medications),
+
+    // Metadane: last-write-wins
+    lastModifiedAt: max(server.lastModifiedAt, client.lastModifiedAt)
+  };
+}
+
+function mergeSections(server, client) {
+  if (server === client) return server;
+  if (!server) return client;
+  if (!client) return server;
+
+  // Oba różne → append
+  return `${server}\n\n[DODANE OFFLINE]:\n${client}`;
+}
+```
+
+**Scenariusz 4: Race condition - rezerwacja slotu**
+
+**Problem:** Dwóch pacjentów klika ten sam slot jednocześnie
+
+**Rozwiązanie: Optimistic locking**
+```sql
+-- Postgres transaction
+BEGIN;
+
+SELECT * FROM appointments
+WHERE doctor_id = 'doc_123'
+  AND slot_time = '2025-11-18 10:00:00'
+  AND status = 'available'
+FOR UPDATE NOWAIT; -- Pierwszy dostaje lock
+
+UPDATE appointments
+SET status = 'booked', patient_id = 'pat_456'
+WHERE id = 'apt_789';
+
+COMMIT;
+-- Drugi dostaje error "slot taken"
+```
+
+```dart
+// Flutter handling
+try {
+  await api.bookAppointment(slot);
+  showSuccess("Wizyta zarezerwowana!");
+} on SlotTakenException {
+  showError("Termin zajęty przez inną osobę. Wybierz inny.");
+  await refreshCalendar();
+}
+```
+
+**C) Conflict Resolution Priority Matrix:**
+
+| Typ danych | Strategia | Dlaczego |
+|-----------|-----------|----------|
+| Dane osobowe | Last-write-wins + timestamp | Rzadko jednocześnie |
+| Alergie/Grupa krwi | Manual resolve | Krytyczne dla bezpieczeństwa |
+| Notatki lekarza | Field-level merge | Obie wersje ważne |
+| Status wizyty | Server wins | Single source of truth |
+| Przypomnienia | Client wins | Lokalne preferencje |
+| Kalendarz | Optimistic locking | Pierwszy = jego |
+
+---
+
+**🏥 MEDICAL DEVICE CERTIFICATION - EU MDR Compliance**
+
+**A) Czy Flutter app musi być certyfikowana?**
+
+**Odpowiedź: ZALEŻY od funkcjonalności** 🎯
+
+**Jest Medical Device jeśli:**
+- ✅ Diagnozuje choroby (nawet "wspomagająco")
+- ✅ Zapobiega chorobom (algorytm predykcyjny)
+- ✅ Monitoruje parametry życiowe + rekomendacje kliniczne
+- ✅ Wspiera decyzje terapeutyczne
+
+**NIE jest Medical Device jeśli:**
+- ❌ Tylko booking system
+- ❌ Tylko przechowuje dane (EHR bez analizy)
+- ❌ Edukuje ogólnie (nie personalizowane)
+- ❌ Komunikacja pacjent↔lekarz (czat, video)
+
+**B) YourMedic - Analiza komponent:**
+
+| Feature | Medical Device? | Klasa | Wymaga CE? |
+|---------|----------------|-------|------------|
+| Booking wizyt | ❌ NIE | - | NIE |
+| Czat/Video | ❌ NIE | - | NIE |
+| Historia (readonly) | ❌ NIE | - | NIE |
+| Przypomnienia o lekach | ⚠️ Szara strefa | I | TAK* |
+| **AI Symptom Checker** | ✅ **TAK** | **IIa** | **TAK** |
+| **AI asystent lekarza** | ✅ **TAK** | **IIa** | **TAK** |
+| **Wearables monitoring** | ✅ **TAK** | **IIa/IIb** | **TAK** |
+| Marketplace | ❌ NIE | - | NIE |
+
+*Przypomnienia: Prosty alarm "weź lek o 18:00" = NIE device | "Nie brałeś 2 dni → kontakt z lekarzem" = TAK device
+
+**C) Strategia: MODULAR CERTIFICATION** 🎯
+
+**Architektura:**
+```
+YourMedic App (Flutter)
+│
+├── Core App (NIE medical device)
+│   ├── Authentication
+│   ├── Booking system
+│   ├── Payments
+│   ├── Chat/Video
+│   ├── Calendar
+│   └── Profile management
+│
+└── Medical Modules (Certyfikowane osobno)
+    ├── AI Symptom Checker (Class IIa) ← CE Mark
+    ├── AI Doctor Assistant (Class IIa) ← CE Mark
+    └── Wearables Monitor (Class IIb) ← CE Mark
+```
+
+**Implementation:**
+```dart
+// Core app - NIE wymaga certyfikacji
+class YourMedicApp {
+  BookingService booking;
+  ChatService chat;
+  PaymentService payments;
+
+  // Opcjonalne moduły (dynamicznie ładowane)
+  MedicalModule? symptomChecker;
+  MedicalModule? aiAssistant;
+}
+
+// Certyfikowany moduł
+@MedicalDevice(
+  classification: "IIa",
+  certNumber: "CE12345"
+)
+class SymptomCheckerModule extends MedicalModule {
+  // Ten kod podlega audytowi Notified Body
+  Future<SymptomAnalysis> analyze(List<Symptom> symptoms) {
+    // Wywołanie do certyfikowanego ML API
+  }
+}
+```
+
+**Zalety:**
+- ✅ Core app: Swobodny deployment (OTA updates, iteracje)
+- ✅ Medical modules: Kontrolowany proces certyfikacyjny
+- ✅ Geographic flexibility: Różne kraje = różne moduły
+- ✅ Cost optimization: Certyf tylko to co trzeba
+
+**D) Proces Certyfikacji Class IIa:**
+
+**1. Dokumentacja techniczna (6-12 miesięcy):**
+- Software development lifecycle (IEC 62304)
+- Risk management file (ISO 14971)
+- Clinical evaluation report
+- Usability engineering (IEC 62366)
+- Cybersecurity docs (MDR Annex I)
+
+**2. Notified Body assessment:**
+- Wybór: BSI, TÜV SÜD, etc.
+- Audyt dokumentacji + code review
+- **Koszt: €20,000 - €50,000** dla Class IIa
+- **Czas: 3-6 miesięcy**
+
+**3. CE Mark:**
+- Ważność: 5 lat → re-certification
+- Surveillance: coroczne audyty
+- Post-market: adverse events tracking
+
+**4. Software updates:**
+- ⚠️ Minor bug fix → nie wymaga nowego CE
+- ⚠️ New feature/algorithm → TAK, wymaga review Notified Body
+
+**E) Deployment Strategy - Hybrid Approach (BEST PRACTICE):**
+
+**ML model na backendzie (nie w app):**
+
+```dart
+// Flutter app (NIE certyfikowane)
+class SymptomCheckerUI {
+  Future<SymptomAnalysis> checkSymptoms(List<Symptom> symptoms) {
+    // Wysyła do API
+    return http.post('/api/v2/symptom-check', body: symptoms);
+  }
+}
+```
+
+```python
+# Backend Python (CERTYFIKOWANY jako SaMD)
+@medical_device_endpoint
+@app.route('/api/v2/symptom-check', methods=['POST'])
+def symptom_check():
+    symptoms = request.json
+    # Ten kod jest certyfikowany
+    result = ml_model.predict(symptoms)
+    return jsonify(result)
+```
+
+**✅ Zalety:**
+- Flutter app: Swobodny deployment
+- Backend API: Kontrolowane zmiany
+- API versioning (v1, v2, v3): Łatwe migracje
+- Rollback: Zmiana endpoint w config
+- Compliance: Backend = "standalone software", Frontend = "accessory" (łagodniejsze wymogi)
+
+**F) Cost Estimate dla Certyfikacji:**
+- Notified Body: €30,000
+- Regulatory consultant: €15,000
+- Clinical evaluation study: €10,000
+- **TOTAL: ~€55,000** dla Class IIa
+
+**G) Strategia dla YourMedic - 3 fazy:**
+
+**Phase 1 (MVP 0-6m): AVOID medical device classification**
+- Launch Core App (booking, chat, marketplace)
+- Symptom Checker jako "educational tool":
+  - "Not medical advice"
+  - "For informational purposes only"
+  - Zero personalized recommendations
+
+**Phase 2 (6-12m): Prepare for certification**
+- Zbieraj dane użytkowników (clinical evaluation)
+- Buduj dokumentację techniczną
+- Hire regulatory consultant (€5-10k)
+- Design modular architecture
+
+**Phase 3 (12m+): Certify AI modules**
+- Submit do Notified Body
+- Podczas review: Core App updates normalnie
+- Po certyfikacji: Medical features jako opt-in
+
+**H) Risk Mitigation - Alternatywy:**
+
+**Opcja 1: Partnership model**
+- YourMedic = platforma (non-device)
+- Lekarz używa SWOJEGO certyfikowanego software
+- Ty = "infrastructure provider"
+
+**Opcja 2: Geographic segmentation**
+- EU/UK: No medical features (tylko booking)
+- US: FDA "low-risk" exemption
+- India/LatAm: Mniej restrykcyjne
+
+**Opcja 3: B2B pivot**
+- Sprzedaj klinikom jako "practice management"
+- Klinika = compliance owner
+- Ty = narzędzia dostarczasz
+
+**💎 KEY INSIGHTS Branch 3 (Część 1):**
+> **Offline-first:** Pacjent cache 6m + 100MB, Lekarz prefetch dziś+jutro 500MB, Last-write-wins + timestamp dla konfliktów
+> **Medical Device:** Core app NIE device (swobodny deploy), AI modules certyfikowane osobno (Class IIa), Backend ML strategy (€55k, 9-12 miesięcy)
+> **MVP Strategy:** Launch bez medical features, certyfikuj później, modular architecture od początku
+
+---
+
 ## Idea Categorization
 
 ### Immediate Opportunities
