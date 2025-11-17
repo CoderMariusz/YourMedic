@@ -40,11 +40,13 @@ workflow_status:
 
       - id: "research"
         name: "Research"
-        status: "recommended"
+        status: "docs/bmm-research-session-2025-11-17.md"
         agent: "analyst"
         command: "research"
         included: true
-        note: "Domain and compliance research - SELECTED BY USER"
+        note: "COMPLETED - Competitive analysis (Docplanner, LUX MED, Medicover), market sizing (TAM €1.4B), regulatory (EU MDR, GDPR, FHIR), user research scripts (50 interviews), technology stack validation (1,108 lines)"
+        completed_date: "2025-11-17"
+        output_file: "docs/bmm-research-session-2025-11-17.md"
 
       - id: "product-brief"
         name: "Product Brief"
