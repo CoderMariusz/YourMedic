@@ -30,11 +30,13 @@ workflow_status:
     workflows:
       - id: "brainstorm-project"
         name: "Brainstorm Project"
-        status: "optional"
+        status: "docs/bmm-brainstorming-session-2025-11-17.md"
         agent: "analyst"
         command: "brainstorm-project"
         included: true
-        note: "Creative exploration and ideation - SELECTED BY USER"
+        note: "COMPLETED - Progressive Flow brainstorming (6,727 lines): Mind Mapping, What If Scenarios, Six Thinking Hats, Assumption Reversal, Convergent Phase with top 3 priorities"
+        completed_date: "2025-11-17"
+        output_file: "docs/bmm-brainstorming-session-2025-11-17.md"
 
       - id: "research"
         name: "Research"
