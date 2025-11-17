@@ -13,7 +13,15 @@
 7. Ryzyka techniczne - Security, compliance (HIPAA/GDPR), integracje
 8. Metryki sukcesu - KPI dla każdej grupy użytkowników
 
-**Approach:** TBD (awaiting user selection)
+**Approach:** Progressive Flow - 4 komplementarne techniki
+
+**Planned Journey:**
+1. Mind Mapping (15-20 min) - Divergent exploration, visual mapping
+2. What If Scenarios (15-20 min) - Creative expansion, radical possibilities
+3. Six Thinking Hats (20-25 min) - Analytical depth, multi-perspective analysis
+4. Assumption Reversal (15 min) - Convergent synthesis, challenge assumptions
+
+**Estimated Duration:** 65-80 minutes
 
 ## Executive Summary
 
